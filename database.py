@@ -1,6 +1,6 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from config import settings
-from repositories.mongodb import MongoDBUserRepository, MongoDBCryptoAssetRepository, MongoDBPortfolioRepository
+from repositories.mongodb import MongoUserRepository, MongoCryptoAssetRepository, MongoPortfolioRepository
 
 class DatabaseFactory:
     """Factory class to create database connections and repositories"""
@@ -30,9 +30,9 @@ class DatabaseFactory:
         self.database = self.client[settings.database_name]
         
         # Initialize repositories
-        self._user_repo = MongoDBUserRepository(self.database)
-        self._crypto_repo = MongoDBCryptoAssetRepository(self.database)
-        self._portfolio_repo = MongoDBPortfolioRepository(self.database)
+        self._user_repo = MongoUserRepository(self.database)
+        self._crypto_repo = MongoCryptoAssetRepository(self.database)
+        self._portfolio_repo = MongoPortfolioRepository(self.database)
     
     @property
     def user_repository(self):
