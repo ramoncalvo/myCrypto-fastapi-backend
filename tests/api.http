@@ -1,0 +1,232 @@
+### MyCrypto FastAPI v2.0 - API Testing
+### Base URL: http://localhost:8000
+
+### Health Check
+GET http://localhost:8000/health
+Accept: application/json
+
+###
+
+### Root Endpoint
+GET http://localhost:8000/
+Accept: application/json
+
+###
+
+### ========================================
+### USER ENDPOINTS
+### ========================================
+
+### Create User
+POST http://localhost:8000/users/
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "name": "Test User",
+  "password": "securepassword123"
+}
+
+###
+
+### Get All Users
+GET http://localhost:8000/users/
+Accept: application/json
+
+###
+
+### Get All Users with Pagination
+GET http://localhost:8000/users/?skip=0&limit=10
+Accept: application/json
+
+###
+
+### Get User by ID (replace with actual ID from create response)
+GET http://localhost:8000/users/{{user_id}}
+Accept: application/json
+
+###
+
+### Update User (replace with actual ID)
+PUT http://localhost:8000/users/{{user_id}}
+Content-Type: application/json
+
+{
+  "name": "Updated Test User",
+  "email": "updated@example.com"
+}
+
+###
+
+### Get User by Email
+GET http://localhost:8000/users/email/test@example.com
+Accept: application/json
+
+###
+
+### Delete User (replace with actual ID)
+DELETE http://localhost:8000/users/{{user_id}}
+Accept: application/json
+
+###
+
+### ========================================
+### CRYPTO ASSETS ENDPOINTS
+### ========================================
+
+### Create Crypto Asset
+POST http://localhost:8000/crypto-assets/
+Content-Type: application/json
+
+{
+  "symbol": "BTC",
+  "name": "Bitcoin",
+  "current_price": 45000.00
+}
+
+###
+
+### Create Multiple Crypto Assets
+POST http://localhost:8000/crypto-assets/
+Content-Type: application/json
+
+{
+  "symbol": "ETH",
+  "name": "Ethereum",
+  "current_price": 3000.00
+}
+
+###
+
+POST http://localhost:8000/crypto-assets/
+Content-Type: application/json
+
+{
+  "symbol": "ADA",
+  "name": "Cardano",
+  "current_price": 0.50
+}
+
+###
+
+POST http://localhost:8000/crypto-assets/
+Content-Type: application/json
+
+{
+  "symbol": "SOL",
+  "name": "Solana",
+  "current_price": 100.00
+}
+
+###
+
+### Get All Crypto Assets
+GET http://localhost:8000/crypto-assets/
+Accept: application/json
+
+###
+
+### Get All Crypto Assets with Pagination
+GET http://localhost:8000/crypto-assets/?skip=0&limit=5
+Accept: application/json
+
+###
+
+### Get Crypto Asset by ID (replace with actual ID)
+GET http://localhost:8000/crypto-assets/{{asset_id}}
+Accept: application/json
+
+###
+
+### Get Crypto Asset by Symbol
+GET http://localhost:8000/crypto-assets/symbol/BTC
+Accept: application/json
+
+###
+
+### Update Crypto Asset Price (replace with actual ID)
+PUT http://localhost:8000/crypto-assets/{{asset_id}}
+Content-Type: application/json
+
+{
+  "current_price": 46000.00
+}
+
+###
+
+### Delete Crypto Asset (replace with actual ID)
+DELETE http://localhost:8000/crypto-assets/{{asset_id}}
+Accept: application/json
+
+###
+
+### ========================================
+### PORTFOLIO ENDPOINTS
+### ========================================
+
+### Create Portfolio Entry
+POST http://localhost:8000/portfolio/
+Content-Type: application/json
+
+{
+  "user_id": "{{user_id}}",
+  "asset_id": "{{asset_id}}",
+  "quantity": 0.5,
+  "purchase_price": 44000.00
+}
+
+###
+
+### Create Another Portfolio Entry
+POST http://localhost:8000/portfolio/
+Content-Type: application/json
+
+{
+  "user_id": "{{user_id}}",
+  "asset_id": "{{eth_asset_id}}",
+  "quantity": 2.0,
+  "purchase_price": 2900.00
+}
+
+###
+
+### Get All Portfolio Entries
+GET http://localhost:8000/portfolio/
+Accept: application/json
+
+###
+
+### Get All Portfolio Entries with Pagination
+GET http://localhost:8000/portfolio/?skip=0&limit=10
+Accept: application/json
+
+###
+
+### Get Portfolio Entry by ID (replace with actual ID)
+GET http://localhost:8000/portfolio/{{portfolio_id}}
+Accept: application/json
+
+###
+
+### Get User Portfolio (replace with actual user ID)
+GET http://localhost:8000/portfolio/user/{{user_id}}
+Accept: application/json
+
+###
+
+### Update Portfolio Entry (replace with actual ID)
+PUT http://localhost:8000/portfolio/{{portfolio_id}}
+Content-Type: application/json
+
+{
+  "quantity": 0.75,
+  "purchase_price": 45000.00
+}
+
+###
+
+### Delete Portfolio Entry (replace with actual ID)
+DELETE http://localhost:8000/portfolio/{{portfolio_id}}
+Accept: application/json
+
+###

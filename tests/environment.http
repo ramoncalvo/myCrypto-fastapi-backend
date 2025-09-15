@@ -1,0 +1,32 @@
+### Environment Variables for HTTP Client
+### Use these variables in your .http files by referencing {{variable_name}}
+
+### Development Environment
+@baseUrl = http://localhost:8000
+@contentType = application/json
+
+### Sample IDs (replace with actual IDs from your database)
+@user_id = 507f1f77bcf86cd799439011
+@asset_id_btc = 507f1f77bcf86cd799439012
+@asset_id_eth = 507f1f77bcf86cd799439013
+@asset_id_ada = 507f1f77bcf86cd799439014
+@portfolio_id = 507f1f77bcf86cd799439015
+
+### Sample User Data
+@test_email = test@mycrypto.com
+@test_name = Test User
+@test_password = securePassword123
+
+### Sample Asset Data
+@btc_symbol = BTC
+@eth_symbol = ETH
+@ada_symbol = ADA
+
+### Sample Prices
+@btc_price = 45000.00
+@eth_price = 3000.00
+@ada_price = 0.50
+
+### Pagination
+@skip = 0
+@limit = 10
