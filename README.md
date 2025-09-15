@@ -23,9 +23,9 @@ pyBackend/
 ├── repositories/              # Patrón Repository
 │   ├── __init__.py
 │   ├── base.py               # Interfaces abstractas
-│   ├── mongodb.py            # Implementación MongoDB
-│   └── firestore.py          # Implementación Firestore
-├── create_tables.py           # Script para inicializar datos
+│   └── mongodb.py            # Implementación MongoDB
+├── docker/                   # Configuración Docker
+│   └── mongo-init.js         # Script inicialización MongoDB
 ├── requirements.txt           # Dependencias Python
 ├── .env.example              # Ejemplo de variables de entorno
 └── README.md                 # Este archivo

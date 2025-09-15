@@ -30,33 +30,33 @@ help:
 
 # Development commands
 dev:
-	docker-compose -f docker-compose.dev.yml up -d
+	docker compose -f docker-compose.dev.yml up -d
 
 dev-build:
-	docker-compose -f docker-compose.dev.yml up --build -d
+	docker compose -f docker-compose.dev.yml up --build -d
 
 dev-logs:
-	docker-compose -f docker-compose.dev.yml logs -f
+	docker compose -f docker-compose.dev.yml logs -f
 
 dev-down:
-	docker-compose -f docker-compose.dev.yml down
+	docker compose -f docker-compose.dev.yml down
 
 # Production commands
 prod:
-	docker-compose up -d
+	docker compose up -d
 
 prod-build:
-	docker-compose up --build -d
+	docker compose up --build -d
 
 prod-logs:
-	docker-compose logs -f
+	docker compose logs -f
 
 prod-down:
-	docker-compose down
+	docker compose down
 
 # Database commands
 mongo:
-	docker-compose -f docker-compose.dev.yml up mongodb -d
+	docker compose -f docker-compose.dev.yml up mongodb -d
 
 mongo-ui:
 	@echo "Opening MongoDB Express at http://localhost:8081"
@@ -66,8 +66,8 @@ mongo-ui:
 
 # Utility commands
 clean:
-	docker-compose -f docker-compose.dev.yml down -v
-	docker-compose down -v
+	docker compose -f docker-compose.dev.yml down -v
+	docker compose down -v
 	docker system prune -f
 
 restart: down up
