@@ -31,7 +31,43 @@ pyBackend/
 └── README.md                 # Este archivo
 ```
 
-## ⚙️ Configuración
+## 🐳 Docker Setup (Recomendado)
+
+### Opción 1: Desarrollo con Docker Compose
+
+```bash
+# Construir y ejecutar todos los servicios
+docker-compose -f docker-compose.dev.yml up --build
+
+# Ejecutar en background
+docker-compose -f docker-compose.dev.yml up -d --build
+
+# Ver logs
+docker-compose -f docker-compose.dev.yml logs -f api
+
+# Parar servicios
+docker-compose -f docker-compose.dev.yml down
+```
+
+### Opción 2: Producción con Docker Compose
+
+```bash
+# Ejecutar en modo producción
+docker-compose up --build -d
+
+# Ver logs
+docker-compose logs -f api
+
+# Parar servicios
+docker-compose down
+```
+
+### Servicios incluidos:
+- **API FastAPI**: `http://localhost:8000`
+- **MongoDB**: `localhost:27017`
+- **Mongo Express**: `http://localhost:8081` (admin/admin123)
+
+## ⚙️ Configuración Manual
 
 ### 1. Instalar Dependencias
 
