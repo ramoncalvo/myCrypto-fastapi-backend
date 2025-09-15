@@ -1,13 +1,15 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends, Query
 from fastapi.middleware.cors import CORSMiddleware
+from typing import List, Optional
 from contextlib import asynccontextmanager
-from typing import List
+
 from database import db_factory
 from models import (
     UserCreate, UserUpdate, UserResponse,
     CryptoAssetCreate, CryptoAssetUpdate, CryptoAssetResponse,
     PortfolioCreate, PortfolioUpdate, PortfolioResponse
 )
+from auth.routes import router as auth_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -32,6 +34,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include authentication routes
+app.include_router(auth_router)
 
 @app.get("/")
 async def root():

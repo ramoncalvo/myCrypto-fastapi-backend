@@ -1,6 +1,26 @@
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel, Field, EmailStr
+from typing import Optional, List
 from datetime import datetime
+from bson import ObjectId
+
+# Custom ObjectId type for Pydantic
+class PyObjectId(ObjectId):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v):
+        if not ObjectId.is_valid(v):
+            raise ValueError('Invalid objectid')
+        return ObjectId(v)
+
+    @classmethod
+    def __modify_schema__(cls, field_schema):
+        field_schema.update(type='string')
+    
+    class Config:
+        from_attributes = True
 
 # Database-agnostic models (DTOs)
 class UserBase(BaseModel):
@@ -95,3 +115,31 @@ class Portfolio(BaseModel):
     
     class Config:
         populate_by_name = True
+
+# Authentication Models
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str
+
+class RegisterRequest(BaseModel):
+    email: EmailStr
+    name: str
+    password: str
+
+class TokenResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+    expires_in: int
+
+class RefreshTokenRequest(BaseModel):
+    refresh_token: str
+
+class UserProfile(BaseModel):
+    id: str
+    email: str
+    name: str
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True

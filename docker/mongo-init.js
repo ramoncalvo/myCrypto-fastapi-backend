@@ -113,22 +113,8 @@ db.portfolio.createIndex({ "asset_id": 1 });
 db.portfolio.createIndex({ "user_id": 1, "asset_id": 1 });
 
 // Insert sample data for testing
-db.users.insertMany([
-  {
-    email: "demo@mycrypto.com",
-    name: "Demo User",
-    password: "demo123",
-    created_at: new Date(),
-    updated_at: new Date()
-  },
-  {
-    email: "test@mycrypto.com",
-    name: "Test User",
-    password: "test123",
-    created_at: new Date(),
-    updated_at: new Date()
-  }
-]);
+// Note: Users will be created via API registration to ensure proper password hashing
+// These are just placeholder crypto assets and portfolio data
 
 db.crypto_assets.insertMany([
   {
