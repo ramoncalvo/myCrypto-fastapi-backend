@@ -1,6 +1,129 @@
-# API Testing Files
+# MyCrypto API Automated Testing
 
-Esta carpeta contiene archivos `.http` para probar la API de MyCrypto FastAPI v2.0.
+Sistema de pruebas automatizadas para todos los endpoints de la API MyCrypto con gestión completa del ciclo de vida de Docker.
+
+## 🚀 Características
+
+- **Aislamiento completo**: Cada prueba ejecuta su propio ciclo Docker (levantar → probar → limpiar → bajar)
+- **Gestión automática de datos**: Limpieza automática de datos de prueba después de cada test
+- **Autenticación automática**: Registro y login automático para pruebas que requieren auth
+- **Reportes detallados**: Estadísticas completas de ejecución y resultados
+
+## 📁 Estructura
+
+```
+tests/
+├── README.md                    # Este archivo
+├── requirements.txt             # Dependencias de testing
+├── run_endpoint_tests.py        # Script principal de testing
+├── unit/
+│   └── test_endpoints.py        # Clases de pruebas por endpoint
+└── postman/                     # Colecciones Postman (legacy)
+```
+
+## 🛠 Instalación
+
+```bash
+# Instalar dependencias de testing
+pip install -r tests/requirements.txt
+```
+
+## 🧪 Ejecución de Pruebas
+
+### Ejecutar todas las pruebas
+```bash
+# Usando Makefile (recomendado)
+make test-endpoints
+
+# Directamente
+./run_tests.sh
+```
+
+### Ejecutar pruebas por categoría
+```bash
+# Pruebas de autenticación
+make test-auth
+
+# Pruebas de crypto assets
+make test-crypto
+
+# Pruebas de portfolios
+make test-portfolio
+
+# Pruebas de transacciones
+make test-transaction
+```
+
+### Ejecutar prueba específica
+```bash
+# Usando Makefile
+make test-endpoint TEST=auth_register
+
+# Directamente
+./run_tests.sh auth_register
+```
+
+## 📋 Pruebas Disponibles
+
+### Autenticación
+- `auth_register` - Registro de usuario
+- `auth_login` - Login de usuario
+
+### Crypto Assets
+- `crypto_list` - Listar crypto assets
+- `crypto_create` - Crear crypto asset
+
+### Portfolios
+- `portfolio_list` - Listar portfolios
+- `portfolio_create` - Crear portfolio
+
+### Transacciones
+- `transaction_list` - Listar transacciones
+- `transaction_buy` - Flujo completo de compra
+- `transaction_stats` - Estadísticas de transacciones
+
+## 🔄 Ciclo de Vida de Cada Prueba
+
+1. **Inicio**: Levantar ambiente Docker (`make dev`)
+2. **Preparación**: Esperar que la API esté lista (health check)
+3. **Autenticación**: Registrar usuario de prueba si es necesario
+4. **Ejecución**: Ejecutar la prueba específica
+5. **Limpieza**: Bajar ambiente Docker (`make dev-down`)
+6. **Purga**: Limpiar volúmenes y contenedores (`docker system prune`)
+
+## 📊 Ejemplo de Salida
+
+```
+🧪 Running: TestAuthEndpoints.test_auth_register
+============================================================
+🚀 Starting Docker environment...
+✅ API is ready
+📝 Register Test Result: {'success': True, 'status_code': 200, ...}
+✅ PASSED in 15.23s
+🛑 Stopping Docker environment...
+🧹 Cleaning Docker environment...
+```
+
+## 🎯 Ventajas del Sistema
+
+- **Aislamiento**: Cada prueba es independiente
+- **Limpieza**: No hay contaminación entre pruebas
+- **Realismo**: Pruebas en ambiente real con Docker
+- **Automatización**: Sin intervención manual
+- **Reportes**: Estadísticas detalladas de ejecución
+
+## 🔧 Configuración
+
+Las pruebas están configuradas para:
+- **URL Base**: `http://localhost:8000`
+- **Timeout**: 30 segundos para health check
+- **Usuario de prueba**: `test@example.com` / `TestPassword123!`
+
+---
+
+# API Testing Files (Legacy)
+
+Esta sección contiene archivos `.http` para probar la API manualmente.
 
 ## Archivos de Testing
 

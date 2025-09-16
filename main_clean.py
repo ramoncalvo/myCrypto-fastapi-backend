@@ -6,7 +6,9 @@ from database import db_factory
 from presentation.api.user_routes import router as user_router
 from presentation.api.crypto_asset_routes import router as crypto_asset_router
 from presentation.api.portfolio_routes import router as portfolio_router
-from auth.routes import router as auth_router
+from presentation.api.auth_routes import router as auth_router
+from presentation.api.transaction_routes import router as transaction_router
+from presentation.api.portfolio_aggregate_routes import router as portfolio_aggregate_router
 
 
 @asynccontextmanager
@@ -39,6 +41,8 @@ app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(crypto_asset_router)
 app.include_router(portfolio_router)
+app.include_router(transaction_router)
+app.include_router(portfolio_aggregate_router)
 
 
 @app.get("/")

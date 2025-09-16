@@ -12,9 +12,10 @@ def get_database() -> AsyncIOMotorDatabase:
     return db_factory.database
 
 
-def get_di_container(database: AsyncIOMotorDatabase = Depends(get_database)) -> DIContainer:
+def get_di_container() -> DIContainer:
     """Get dependency injection container"""
-    return DIContainer(database)
+    from database import db_factory
+    return DIContainer(db_factory.database)
 
 
 def get_user_use_cases(container: DIContainer = Depends(get_di_container)) -> UserUseCases:

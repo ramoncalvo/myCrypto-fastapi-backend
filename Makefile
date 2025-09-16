@@ -7,10 +7,20 @@ help:
 	@echo "MyCrypto FastAPI Backend Commands:"
 	@echo ""
 	@echo "Development:"
-	@echo "  make dev          - Start development environment with hot reload"
+	@echo "  make dev          - Start development environment with hot reload (Clean Architecture)"
 	@echo "  make dev-build    - Build and start development environment"
 	@echo "  make dev-logs     - Show development logs"
 	@echo "  make dev-down     - Stop development environment"
+	@echo "  make dev-local    - Run Clean Architecture API locally (no Docker)"
+	@echo "  make dev-local-mongo - Start only MongoDB + UI for local development"
+	@echo ""
+	@echo "Testing:"
+	@echo "  make test-endpoints    - Run all automated endpoint tests"
+	@echo "  make test-auth         - Run authentication tests only"
+	@echo "  make test-crypto       - Run crypto asset tests only"
+	@echo "  make test-portfolio    - Run portfolio tests only"
+	@echo "  make test-transaction  - Run transaction tests only"
+	@echo "  make test-endpoint TEST=<name> - Run specific test (auth_register, crypto_list, etc.)"
 	@echo ""
 	@echo "Production:"
 	@echo "  make prod         - Start production environment"
@@ -41,6 +51,18 @@ dev-logs:
 
 dev-down:
 	docker compose -f docker-compose.dev.yml down
+
+# Local development (without Docker)
+dev-local:
+	@echo "Starting MyCrypto API with Clean Architecture locally..."
+	@echo "Make sure MongoDB is running (use 'make mongo' or local MongoDB)"
+	uvicorn main_clean:app --host 0.0.0.0 --port 8000 --reload
+
+dev-local-mongo:
+	@echo "Starting MongoDB only..."
+	docker compose -f docker-compose.dev.yml up mongodb mongo-express -d
+	@echo "MongoDB running at: mongodb://localhost:27017"
+	@echo "MongoDB Express UI: http://localhost:8081 (admin/admin123)"
 
 # Production commands
 prod:
@@ -87,6 +109,36 @@ test:
 
 install:
 	pip install -r requirements.txt
+
+# Automated endpoint testing
+test-endpoints:
+	@echo "Running automated endpoint tests..."
+	./run_tests.sh
+
+test-endpoint:
+	@echo "Running specific endpoint test: $(TEST)"
+	./run_tests.sh $(TEST)
+
+test-auth:
+	@echo "Running authentication tests..."
+	./run_tests.sh auth_register
+	./run_tests.sh auth_login
+
+test-crypto:
+	@echo "Running crypto asset tests..."
+	./run_tests.sh crypto_list
+	./run_tests.sh crypto_create
+
+test-portfolio:
+	@echo "Running portfolio tests..."
+	./run_tests.sh portfolio_list
+	./run_tests.sh portfolio_create
+
+test-transaction:
+	@echo "Running transaction tests..."
+	./run_tests.sh transaction_list
+	./run_tests.sh transaction_buy
+	./run_tests.sh transaction_stats
 
 # Aliases
 up: dev

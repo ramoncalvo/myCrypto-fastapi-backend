@@ -74,7 +74,7 @@ class MongoUserRepository(IUserRepository):
             id=UserId(str(user_doc["_id"])),
             email=Email(user_doc["email"]),
             name=user_doc["name"],
-            password_hash=user_doc["password_hash"],
+            password_hash=user_doc.get("password_hash", ""),  # Handle missing password_hash
             created_at=user_doc["created_at"],
             updated_at=user_doc.get("updated_at")
         )
