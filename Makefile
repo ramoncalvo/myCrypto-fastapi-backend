@@ -24,6 +24,7 @@ help:
 	@echo ""
 	@echo "Utilities:"
 	@echo "  make clean        - Clean Docker containers and volumes"
+	@echo "  make clean-db     - Reset database (remove volume only)"
 	@echo "  make restart      - Restart all services"
 	@echo "  make test         - Run API tests"
 	@echo "  make install      - Install Python dependencies locally"
@@ -69,6 +70,11 @@ clean:
 	docker compose -f docker-compose.dev.yml down -v
 	docker compose down -v
 	docker system prune -f
+
+clean-db:
+	docker compose -f docker-compose.dev.yml down
+	docker volume rm pybackend_mongodb_data_dev || true
+	@echo "Database volume removed. Run 'make dev' to restart with fresh database."
 
 restart: down up
 

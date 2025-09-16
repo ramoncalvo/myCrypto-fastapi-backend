@@ -1,35 +1,51 @@
-### MyCrypto FastAPI v2.0 - Authentication Testing
-### Base URL: http://localhost:8000
+### Authentication API Tests
+### Base URL: {{baseUrl}}
 
-### ========================================
-### AUTHENTICATION ENDPOINTS
-### ========================================
-
-### Register New User
-POST http://localhost:8000/auth/register
+### 1. Register New User
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "email": "newuser@example.com",
-  "name": "New User",
+  "email": "testuser@example.com",
+  "name": "Test User",
   "password": "securepassword123"
 }
 
+> {%
+client.test("User registration", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.body.email, "Email not found");
+    client.assert(response.body.id, "User ID not found");
+});
+%}
+
 ###
 
-### Login User
-POST http://localhost:8000/auth/login
+### 2. Login User and Capture Tokens
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "newuser@example.com",
+  "email": "testuser@example.com",
   "password": "securepassword123"
 }
 
+> {%
+client.test("User login", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.body.access_token, "Access token not found");
+    client.assert(response.body.refresh_token, "Refresh token not found");
+    
+    // Store tokens for subsequent requests
+    client.global.set("access_token", response.body.access_token);
+    client.global.set("refresh_token", response.body.refresh_token);
+});
+%}
+
 ###
 
-### Login with Demo User (from mongo-init.js)
-POST http://localhost:8000/auth/login
+### 3. Login with Demo User and Capture Tokens
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
@@ -37,33 +53,80 @@ Content-Type: application/json
   "password": "demo123"
 }
 
+> {%
+client.test("Demo user login", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.body.access_token, "Access token not found");
+    client.assert(response.body.refresh_token, "Refresh token not found");
+    
+    // Store demo tokens for testing
+    client.global.set("access_token", response.body.access_token);
+    client.global.set("refresh_token", response.body.refresh_token);
+});
+%}
+
 ###
 
-### Get User Profile (Protected Route)
-GET http://localhost:8000/auth/profile
+### 4. Get User Profile (Protected Route)
+GET {{baseUrl}}/auth/profile
 Authorization: Bearer {{access_token}}
 
+> {%
+client.test("Get user profile", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.body.email, "Email not found");
+    client.assert(response.body.id, "User ID not found");
+});
+%}
+
 ###
 
-### Verify Token
-GET http://localhost:8000/auth/verify
+### 5. Verify Token
+GET {{baseUrl}}/auth/verify
 Authorization: Bearer {{access_token}}
 
+> {%
+client.test("Verify token", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.body.valid === true, "Token is not valid");
+    client.assert(response.body.user, "User object not found");
+});
+%}
+
 ###
 
-### Refresh Token
-POST http://localhost:8000/auth/refresh
+### 6. Refresh Token and Update Access Token
+POST {{baseUrl}}/auth/refresh
 Content-Type: application/json
 
 {
   "refresh_token": "{{refresh_token}}"
 }
 
+> {%
+client.test("Refresh token", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.body.access_token, "New access token not found");
+    client.assert(response.body.refresh_token, "New refresh token not found");
+    
+    // Update tokens with new ones
+    client.global.set("access_token", response.body.access_token);
+    client.global.set("refresh_token", response.body.refresh_token);
+});
+%}
+
 ###
 
-### Logout
-POST http://localhost:8000/auth/logout
+### 7. Logout User
+POST {{baseUrl}}/auth/logout
 Authorization: Bearer {{access_token}}
+
+> {%
+client.test("User logout", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.body.message, "Logout message not found");
+});
+%}
 
 ###
 
