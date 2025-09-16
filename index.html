@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyCrypto FastAPI Backend - Documentación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .doc-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid #667eea;
+        }
+
+        .doc-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .doc-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .doc-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .doc-content {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .doc-content h1, .doc-content h2, .doc-content h3 {
+            color: #333;
+            margin: 15px 0 10px 0;
+        }
+
+        .doc-content h1 {
+            font-size: 1.3rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+
+        .doc-content h2 {
+            font-size: 1.1rem;
+            color: #667eea;
+        }
+
+        .doc-content h3 {
+            font-size: 1rem;
+            color: #764ba2;
+        }
+
+        .doc-content ul, .doc-content ol {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .doc-content li {
+            margin-bottom: 5px;
+        }
+
+        .doc-content code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+
+        .doc-content pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            opacity: 0.8;
+        }
+
+        .completed {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .pending {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        .toggle-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .toggle-btn:hover {
+            background: #5a6268;
+        }
+
+        .collapsed {
+            max-height: 100px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .docs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 MyCrypto FastAPI Backend</h1>
+            <p>Documentación Completa del Proyecto</p>
+            <div class="status-badge">✅ Testing Automatizado: 100% Éxito</div>
+        </div>
+
+        <div class="docs-grid">
+            <div class="doc-card">
+                <h3><span class="icon">📋</span> Features Roadmap</h3>
+                <p>Hoja de ruta completa del proyecto con el estado actual de implementación de todas las funcionalidades.</p>
+                <button class="toggle-btn" onclick="toggleContent('roadmap')">Mostrar/Ocultar Contenido</button>
+                <div id="roadmap" class="doc-content collapsed">
+                    <div id="roadmap-content">Cargando...</div>
+                </div>
+            </div>
+
+            <div class="doc-card">
+                <h3><span class="icon">🏗️</span> Clean Architecture</h3>
+                <p>Documentación detallada de la arquitectura limpia implementada en el proyecto, incluyendo capas y principios.</p>
+                <button class="toggle-btn" onclick="toggleContent('architecture')">Mostrar/Ocultar Contenido</button>
+                <div id="architecture" class="doc-content collapsed">
+                    <div id="architecture-content">Cargando...</div>
+                </div>
+            </div>
+
+            <div class="doc-card">
+                <h3><span class="icon">🔐</span> Sistema de Autenticación</h3>
+                <p>Guía completa del sistema de autenticación JWT implementado, incluyendo endpoints y flujos de seguridad.</p>
+                <button class="toggle-btn" onclick="toggleContent('auth')">Mostrar/Ocultar Contenido</button>
+                <div id="auth" class="doc-content collapsed">
+                    <div id="auth-content">Cargando...</div>
+                </div>
+            </div>
+
+            <div class="doc-card">
+                <h3><span class="icon">📖</span> README Principal</h3>
+                <p>Información general del proyecto, instalación, configuración y guía de inicio rápido.</p>
+                <button class="toggle-btn" onclick="toggleContent('readme')">Mostrar/Ocultar Contenido</button>
+                <div id="readme" class="doc-content collapsed">
+                    <div id="readme-content">Cargando...</div>
+                </div>
+            </div>
+
+            <div class="doc-card">
+                <h3><span class="icon">🧪</span> Testing Automatizado</h3>
+                <p>Documentación del sistema de testing automatizado con Docker, incluyendo comandos y estructura de pruebas.</p>
+                <button class="toggle-btn" onclick="toggleContent('testing')">Mostrar/Ocultar Contenido</button>
+                <div id="testing" class="doc-content collapsed">
+                    <div id="testing-content">Cargando...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🔧 Desarrollado con FastAPI + Clean Architecture + MongoDB</p>
+            <p>📊 Estado del Proyecto: <span class="completed">Fase 1 y 2 Completadas</span></p>
+            <p>🚀 Última actualización: <span id="last-update"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Función para convertir markdown a HTML básico
+        function markdownToHtml(markdown) {
+            return markdown
+                // Headers
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                // Bold
+                .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+                // Italic
+                .replace(/\*(.*)\*/gim, '<em>$1</em>')
+                // Code blocks
+                .replace(/```([\s\S]*?)```/gim, '<pre><code>$1</code></pre>')
+                // Inline code
+                .replace(/`([^`]*)`/gim, '<code>$1</code>')
+                // Links
+                .replace(/\[([^\]]*)\]\(([^\)]*)\)/gim, '<a href="$2" target="_blank">$1</a>')
+                // Lists
+                .replace(/^\- (.*$)/gim, '<li>$1</li>')
+                .replace(/^(\d+)\. (.*$)/gim, '<li>$1. $2</li>')
+                // Checkboxes
+                .replace(/- \[x\] (.*$)/gim, '<li class="completed">✅ $1</li>')
+                .replace(/- \[ \] (.*$)/gim, '<li class="pending">⏳ $1</li>')
+                // Line breaks
+                .replace(/\n/gim, '<br>');
+        }
+
+        // Función para alternar contenido
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            content.classList.toggle('collapsed');
+            
+            // Cargar contenido si no está cargado
+            if (!content.dataset.loaded) {
+                loadContent(id);
+                content.dataset.loaded = 'true';
+            }
+        }
+
+        // Función para cargar contenido de archivos MD
+        async function loadContent(type) {
+            const files = {
+                'roadmap': 'FEATURES_ROADMAP.md',
+                'architecture': 'CLEAN_ARCHITECTURE.md',
+                'auth': 'AUTH_SYSTEM.md',
+                'readme': 'README.md',
+                'testing': 'tests/README.md'
+            };
+
+            try {
+                const response = await fetch(files[type]);
+                if (response.ok) {
+                    const text = await response.text();
+                    const html = markdownToHtml(text);
+                    document.getElementById(type + '-content').innerHTML = html;
+                } else {
+                    document.getElementById(type + '-content').innerHTML = 
+                        '<p style="color: #dc3545;">❌ Error al cargar el archivo: ' + files[type] + '</p>';
+                }
+            } catch (error) {
+                document.getElementById(type + '-content').innerHTML = 
+                    '<p style="color: #dc3545;">❌ Error de conexión al cargar: ' + files[type] + '</p>';
+            }
+        }
+
+        // Establecer fecha de última actualización
+        document.getElementById('last-update').textContent = new Date().toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        // Cargar contenido del roadmap por defecto
+        document.addEventListener('DOMContentLoaded', function() {
+            loadContent('roadmap');
+            document.getElementById('roadmap').dataset.loaded = 'true';
+        });
+    </script>
+</body>
+</html>
