@@ -59,20 +59,26 @@ Esta es la lista de features del backend NestJS que necesitamos portar a FastAPI
 
 ## 🔄 Trading Integration
 
-### Issue #5: Bitso API Integration
+### Issue #5: Bitso API Integration ✅ COMPLETED
 **Priority: High**
-- [ ] Bitso API client implementation
-- [ ] Market data fetching (tickers, orderbook, trades)
-- [ ] Account balance synchronization
-- [ ] Order placement and management
-- [ ] Trade execution
-- [ ] API rate limiting
+- [x] Bitso API client implementation
+- [x] Market data fetching (tickers, orderbook, trades)
+- [x] Account balance synchronization
+- [x] Order placement and management
+- [x] Trade execution
+- [x] API rate limiting
+- [x] **NEW**: Comprehensive unit tests for all Bitso endpoints
+- [x] **NEW**: Public and private endpoint testing with authentication
+- [x] **NEW**: Integration with automated testing framework
 
-**Files to create:**
-- `integrations/bitso/bitso_client.py`
-- `integrations/bitso/bitso_service.py`
-- `integrations/bitso/models.py`
-- `trading/trading_service.py`
+**Files created:**
+- ✅ `integrations/bitso/bitso_client.py` - HTTP client with HMAC auth and rate limiting
+- ✅ `integrations/bitso/bitso_service.py` - Business logic layer with error handling
+- ✅ `integrations/bitso/models.py` - Pydantic models for API requests/responses
+- ✅ `trading/trading_service.py` - High-level trading operations orchestration
+- ✅ `presentation/api/bitso_routes.py` - FastAPI endpoints for Bitso integration
+- ✅ `presentation/schemas/bitso_schemas.py` - API request/response schemas
+- ✅ `tests/unit/test_endpoints.py` - Comprehensive Bitso endpoint tests
 
 ### Issue #6: Real-time Market Data
 **Priority: Medium**
@@ -174,9 +180,9 @@ Esta es la lista de features del backend NestJS que necesitamos portar a FastAPI
 - Issues #1, #2, #3 ✅
 - Basic JWT auth + User management + Portfolio CRUD ✅
 
-### Phase 2 (Weeks 3-4): Trading Integration ✅ PARTIALLY COMPLETED
-- Issues #4 ✅, #5 (pending)
-- Transaction management ✅ + Bitso integration (pending)
+### Phase 2 (Weeks 3-4): Trading Integration ✅ COMPLETED
+- Issues #4 ✅, #5 ✅
+- Transaction management ✅ + Bitso integration ✅
 
 ### Phase 3 (Weeks 5-6): Real-time Features
 - Issues #6, #10

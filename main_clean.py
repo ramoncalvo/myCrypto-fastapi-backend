@@ -9,6 +9,7 @@ from presentation.api.portfolio_routes import router as portfolio_router
 from presentation.api.auth_routes import router as auth_router
 from presentation.api.transaction_routes import router as transaction_router
 from presentation.api.portfolio_aggregate_routes import router as portfolio_aggregate_router
+from presentation.api.bitso_routes import router as bitso_router
 
 
 @asynccontextmanager
@@ -43,6 +44,7 @@ app.include_router(crypto_asset_router)
 app.include_router(portfolio_router)
 app.include_router(transaction_router)
 app.include_router(portfolio_aggregate_router)
+app.include_router(bitso_router)
 
 
 @app.get("/")

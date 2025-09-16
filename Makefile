@@ -116,8 +116,24 @@ test-endpoints:
 	./run_tests.sh
 
 test-endpoint:
-	@echo "Running specific endpoint test: $(TEST)"
-	./run_tests.sh $(TEST)
+	@echo "🎯 Running specific test: $(TEST)"
+	@cd tests && python run_endpoint_tests.py $(TEST)
+
+# Bitso API Integration Tests
+test-bitso-public:
+	@echo "🌐 Testing Bitso public endpoints..."
+	@make test-endpoint TEST=bitso_books
+	@make test-endpoint TEST=bitso_ticker
+	@make test-endpoint TEST=bitso_overview
+
+test-bitso-private:
+	@echo "🔐 Testing Bitso private endpoints..."
+	@make test-endpoint TEST=bitso_private
+
+test-bitso-all:
+	@echo "🚀 Testing all Bitso endpoints..."
+	@make test-bitso-public
+	@make test-bitso-private
 
 test-auth:
 	@echo "Running authentication tests..."

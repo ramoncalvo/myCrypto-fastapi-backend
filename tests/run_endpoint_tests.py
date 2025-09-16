@@ -17,7 +17,8 @@ from tests.unit.test_endpoints import (
     TestAuthEndpoints, 
     TestCryptoAssetEndpoints, 
     TestPortfolioEndpoints, 
-    TestTransactionEndpoints
+    TestTransactionEndpoints, 
+    TestBitsoEndpoints
 )
 
 class TestRunner:
@@ -86,6 +87,12 @@ class TestRunner:
             (TestTransactionEndpoints, 'test_transactions_list'),
             (TestTransactionEndpoints, 'test_transaction_buy_flow'),
             (TestTransactionEndpoints, 'test_transaction_stats'),
+            
+            # Bitso API tests
+            (TestBitsoEndpoints, 'test_bitso_available_books'),
+            (TestBitsoEndpoints, 'test_bitso_ticker'),
+            (TestBitsoEndpoints, 'test_bitso_market_overview'),
+            (TestBitsoEndpoints, 'test_bitso_private_endpoints'),
         ]
         
         # Run each test
@@ -145,14 +152,26 @@ def main():
             'portfolio_list': (TestPortfolioEndpoints, 'test_portfolios_list'),
             'portfolio_create': (TestPortfolioEndpoints, 'test_portfolios_create'),
             'transaction_list': (TestTransactionEndpoints, 'test_transactions_list'),
-            'transaction_buy': (TestTransactionEndpoints, 'test_transaction_buy_flow'),
-            'transaction_stats': (TestTransactionEndpoints, 'test_transaction_stats'),
+            'transaction_buy': TestTransactionEndpoints().test_transaction_buy_flow,
+            'transaction_stats': TestTransactionEndpoints().test_transaction_stats,
+            'bitso_books': TestBitsoEndpoints().test_bitso_available_books,
+            'bitso_ticker': TestBitsoEndpoints().test_bitso_ticker,
+            'bitso_overview': TestBitsoEndpoints().test_bitso_market_overview,
+            'bitso_private': TestBitsoEndpoints().test_bitso_private_endpoints,
         }
         
         if test_name in test_map:
             runner = TestRunner()
-            test_class, method_name = test_map[test_name]
-            result = runner.run_test_method(test_class, method_name)
+            if isinstance(test_map[test_name], tuple):
+                test_class, method_name = test_map[test_name]
+                result = runner.run_test_method(test_class, method_name)
+            else:
+                result = {'test': test_name, 'status': 'PASSED', 'duration': 0, 'error': None}
+                try:
+                    test_map[test_name]()
+                except Exception as e:
+                    result['status'] = 'FAILED'
+                    result['error'] = str(e)
             runner.results.append(result)
             runner.print_summary()
         else:

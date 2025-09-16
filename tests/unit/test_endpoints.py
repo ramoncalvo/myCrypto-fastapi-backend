@@ -437,6 +437,94 @@ class TestTransactionEndpoints:
             tester.stop_environment()
             tester.clean_docker()
 
+class TestBitsoEndpoints:
+    """Test Bitso API integration endpoints"""
+    
+    def test_bitso_available_books(self):
+        """Test Bitso available books endpoint"""
+        tester = EndpointTester()
+        
+        # Start environment
+        assert tester.start_environment(), "Failed to start environment"
+        
+        try:
+            # Test public endpoint (no auth required)
+            books_result = tester.test_endpoint("GET", "/bitso/books", expected_status=200)
+            print(f"📚 Bitso Books Test Result: {books_result}")
+            assert books_result["success"], f"Bitso books test failed: {books_result}"
+            
+            return True
+            
+        finally:
+            tester.stop_environment()
+    
+    def test_bitso_ticker(self):
+        """Test Bitso ticker endpoint"""
+        tester = EndpointTester()
+        
+        # Start environment
+        assert tester.start_environment(), "Failed to start environment"
+        
+        try:
+            # Test all tickers
+            ticker_result = tester.test_endpoint("GET", "/bitso/ticker", expected_status=200)
+            print(f"📈 Bitso Ticker Test Result: {ticker_result}")
+            assert ticker_result["success"], f"Bitso ticker test failed: {ticker_result}"
+            
+            return True
+            
+        finally:
+            tester.stop_environment()
+    
+    def test_bitso_market_overview(self):
+        """Test Bitso market overview endpoint"""
+        tester = EndpointTester()
+        
+        # Start environment
+        assert tester.start_environment(), "Failed to start environment"
+        
+        try:
+            # Test market overview
+            overview_result = tester.test_endpoint("GET", "/bitso/market-overview", expected_status=200)
+            print(f"🌐 Bitso Market Overview Test Result: {overview_result}")
+            assert overview_result["success"], f"Bitso market overview test failed: {overview_result}"
+            
+            return True
+            
+        finally:
+            tester.stop_environment()
+    
+    def test_bitso_private_endpoints(self):
+        """Test Bitso private endpoints with authentication"""
+        tester = EndpointTester()
+        
+        # Start environment
+        assert tester.start_environment(), "Failed to start environment"
+        
+        try:
+            # Register user and get auth
+            assert tester.register_test_user(), "Failed to register test user"
+            
+            # Test account balances (expects failure without real API keys)
+            balances_result = tester.test_endpoint("GET", "/bitso/account/balances", 
+                                                 auth_required=True, expected_status=400)
+            print(f"💰 Bitso Balances Test Result: {balances_result}")
+            # We expect this to fail with 400 due to missing API credentials
+            assert balances_result["status_code"] == 400, f"Expected 400 error for missing API keys"
+            
+            # Test portfolio summary (expects failure without real API keys)
+            portfolio_result = tester.test_endpoint("GET", "/bitso/account/portfolio", 
+                                                  auth_required=True, expected_status=400)
+            print(f"📊 Bitso Portfolio Test Result: {portfolio_result}")
+            # We expect this to fail with 400 due to missing API credentials
+            assert portfolio_result["status_code"] == 400, f"Expected 400 error for missing API keys"
+            
+            return True
+            
+        finally:
+            tester.stop_environment()
+
+
 if __name__ == "__main__":
     # Run individual test classes
     print("🧪 Starting Endpoint Tests...")

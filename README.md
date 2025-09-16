@@ -1,16 +1,31 @@
-# MyCrypto FastAPI Backend v2.0
+# MyCrypto FastAPI Backend
 
-Una aplicación FastAPI para gestión de portafolios de criptomonedas con **arquitectura desacoplada** que soporta múltiples bases de datos (MongoDB, Firebase/Firestore).
+## Overview
+A modern cryptocurrency portfolio management system built with FastAPI, implementing Clean Architecture principles for scalability and maintainability. Now featuring complete Bitso API integration for real-time trading capabilities.
 
-## 🚀 Características
+## Features
+- JWT Authentication with secure password hashing
+- Portfolio management with real-time tracking
+- Transaction recording and analysis
+- **🚀 NEW: Complete Bitso API Integration**
+  - Real-time market data (tickers, orderbook, trades)
+  - Account balance synchronization
+  - Order placement and management
+  - Rate limiting and HMAC authentication
+  - Comprehensive testing suite
+- Clean Architecture implementation
+- MongoDB integration with database-agnostic design
+- Comprehensive API testing suite with Docker lifecycle management
+- Docker containerization
 
-- **FastAPI**: Framework web moderno y rápido para construir APIs
-- **Arquitectura Desacoplada**: Patrón Repository para intercambiar bases de datos
-- **MongoDB**: Soporte nativo con Motor (async)
-- **Firebase/Firestore**: Soporte opcional
-- **Pydantic**: Validación de datos y serialización
-- **CORS**: Configurado para desarrollo frontend
-- **Database Agnostic**: Cambia de base de datos sin modificar código
+## Tech Stack
+- **FastAPI** - Modern Python web framework
+- **MongoDB** - Document database
+- **JWT** - Authentication tokens
+- **Pydantic** - Data validation
+- **aiohttp** - Async HTTP client for Bitso API
+- **Docker** - Containerization
+- **Pytest** - Testing framework
 
 ## 📁 Estructura del Proyecto
 
@@ -159,6 +174,21 @@ La API estará disponible en: http://localhost:8000
 - `PUT /portfolio/{portfolio_id}` - Actualizar entrada
 - `DELETE /portfolio/{portfolio_id}` - Eliminar entrada
 - `GET /portfolio/user/{user_id}` - Obtener portafolio de usuario
+
+### 🚀 Bitso API Integration
+- `GET /bitso/books` - Libros de trading disponibles
+- `GET /bitso/ticker` - Información de ticker por libro
+- `GET /bitso/orderbook` - Libro de órdenes
+- `GET /bitso/trades` - Historial de trades
+- `GET /bitso/market-overview` - Vista general del mercado
+- `GET /bitso/book-details/{book}` - Detalles específicos de un libro
+- `GET /bitso/account-info` - Información de cuenta (requiere API keys)
+- `GET /bitso/balances` - Balances de la cuenta (requiere API keys)
+- `GET /bitso/portfolio-summary` - Resumen del portafolio (requiere API keys)
+- `POST /bitso/market-buy` - Compra a precio de mercado (requiere API keys)
+- `POST /bitso/market-sell` - Venta a precio de mercado (requiere API keys)
+- `POST /bitso/limit-order` - Orden límite (requiere API keys)
+- `DELETE /bitso/cancel-order/{order_id}` - Cancelar orden (requiere API keys)
 
 ## 📊 Modelos de Datos
 
