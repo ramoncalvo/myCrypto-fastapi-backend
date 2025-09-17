@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MyCrypto{% endblock %}</title>
+    
+    <!-- Base CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Page-specific CSS -->
+    {% block css %}{% endblock %}
+    
+    <!-- Additional head content -->
+    {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <!-- Main content -->
+    {% block content %}{% endblock %}
+
+    <!-- Notification Container -->
+    <div id="notifications" class="notifications-container"></div>
+
+    <!-- Base JavaScript -->
+    <script src="/static/js/api.js"></script>
+    
+    <!-- Page-specific JavaScript -->
+    {% block js %}{% endblock %}
+</body>
+</html>

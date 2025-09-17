@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
 from database import db_factory
@@ -10,6 +11,7 @@ from presentation.api.auth_routes import router as auth_router
 from presentation.api.transaction_routes import router as transaction_router
 from presentation.api.portfolio_aggregate_routes import router as portfolio_aggregate_router
 from presentation.api.bitso_routes import router as bitso_router
+from presentation.api.ui_routes import router as ui_router
 
 
 @asynccontextmanager
@@ -37,7 +39,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 # Include routers
+app.include_router(ui_router)  # UI routes first (for root path)
 app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(crypto_asset_router)
@@ -47,8 +53,8 @@ app.include_router(portfolio_aggregate_router)
 app.include_router(bitso_router)
 
 
-@app.get("/")
-async def root():
+@app.get("/api")
+async def api_info():
     return {
         "message": "Welcome to MyCrypto API v3.0 - Clean Architecture",
         "architecture": "Clean Architecture with Domain-Driven Design",

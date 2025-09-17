@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+{% block title %}MyCrypto - Dashboard{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/dashboard.css">
+{% endblock %}
+
+{% block content %}
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-coins"></i>
+                <span>MyCrypto</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="#portfolio" class="nav-link" data-section="portfolio">
+                    <i class="fas fa-briefcase"></i> Portfolio
+                </a>
+                <a href="#transactions" class="nav-link" data-section="transactions">
+                    <i class="fas fa-exchange-alt"></i> Transacciones
+                </a>
+                <a href="#market" class="nav-link" data-section="market">
+                    <i class="fas fa-chart-bar"></i> Mercado
+                </a>
+                <a href="#alerts" class="nav-link" data-section="alerts">
+                    <i class="fas fa-bell"></i> Alertas
+                </a>
+            </div>
+            <div class="nav-user">
+                <div class="user-info">
+                    <span id="username">Usuario</span>
+                    <button class="btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="content-section active">
+            <div class="section-header">
+                <h1><i class="fas fa-chart-line"></i> Dashboard</h1>
+                <div class="connection-status">
+                    <span id="ws-status" class="status-indicator offline">
+                        <i class="fas fa-circle"></i> Desconectado
+                    </span>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Portfolio Summary -->
+                <div class="card portfolio-summary">
+                    <div class="card-header">
+                        <h3><i class="fas fa-wallet"></i> Resumen del Portfolio</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="summary-item">
+                            <span class="label">Valor Total:</span>
+                            <span class="value" id="total-value">$0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Ganancia/Pérdida 24h:</span>
+                            <span class="value" id="daily-change">$0.00 (0%)</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Activos:</span>
+                            <span class="value" id="total-assets">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card quick-actions">
+                    <div class="card-header">
+                        <h3><i class="fas fa-bolt"></i> Acciones Rápidas</h3>
+                    </div>
+                    <div class="card-content">
+                        <button class="action-btn buy-btn" onclick="showBuyModal()">
+                            <i class="fas fa-plus"></i> Comprar
+                        </button>
+                        <button class="action-btn sell-btn" onclick="showSellModal()">
+                            <i class="fas fa-minus"></i> Vender
+                        </button>
+                        <button class="action-btn alert-btn" onclick="showAlertModal()">
+                            <i class="fas fa-bell"></i> Crear Alerta
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Market Overview -->
+                <div class="card market-overview">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-bar"></i> Mercado en Vivo</h3>
+                    </div>
+                    <div class="card-content">
+                        <div id="market-data" class="market-list">
+                            <div class="loading">Cargando datos del mercado...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="card recent-transactions">
+                    <div class="card-header">
+                        <h3><i class="fas fa-history"></i> Transacciones Recientes</h3>
+                    </div>
+                    <div class="card-content">
+                        <div id="recent-transactions" class="transaction-list">
+                            <div class="loading">Cargando transacciones...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio-section" class="content-section">
+            <div class="section-header">
+                <h1><i class="fas fa-briefcase"></i> Portfolio</h1>
+                <button class="btn-primary" onclick="createPortfolio()">
+                    <i class="fas fa-plus"></i> Nuevo Portfolio
+                </button>
+            </div>
+            <div id="portfolio-content" class="portfolio-grid">
+                <div class="loading">Cargando portfolios...</div>
+            </div>
+        </section>
+
+        <!-- Transactions Section -->
+        <section id="transactions-section" class="content-section">
+            <div class="section-header">
+                <h1><i class="fas fa-exchange-alt"></i> Transacciones</h1>
+                <div class="transaction-filters">
+                    <select id="transaction-filter">
+                        <option value="all">Todas</option>
+                        <option value="buy">Compras</option>
+                        <option value="sell">Ventas</option>
+                        <option value="pending">Pendientes</option>
+                    </select>
+                </div>
+            </div>
+            <div id="transactions-content" class="transactions-table">
+                <div class="loading">Cargando transacciones...</div>
+            </div>
+        </section>
+
+        <!-- Market Section -->
+        <section id="market-section" class="content-section">
+            <div class="section-header">
+                <h1><i class="fas fa-chart-bar"></i> Datos del Mercado</h1>
+            </div>
+            <div id="market-content" class="market-grid">
+                <div class="loading">Cargando datos del mercado...</div>
+            </div>
+        </section>
+
+        <!-- Alerts Section -->
+        <section id="alerts-section" class="content-section">
+            <div class="section-header">
+                <h1><i class="fas fa-bell"></i> Alertas de Precio</h1>
+                <button class="btn-primary" onclick="showAlertModal()">
+                    <i class="fas fa-plus"></i> Nueva Alerta
+                </button>
+            </div>
+            <div id="alerts-content" class="alerts-grid">
+                <div class="loading">Cargando alertas...</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <!-- Buy Modal -->
+    <div id="buy-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus"></i> Comprar Criptomoneda</h3>
+                <span class="close" onclick="closeBuyModal()">&times;</span>
+            </div>
+            <form id="buy-form">
+                <div class="form-group">
+                    <label for="buy-symbol">Criptomoneda:</label>
+                    <select id="buy-symbol" required>
+                        <option value="">Seleccionar...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="buy-amount">Cantidad:</label>
+                    <input type="number" id="buy-amount" step="0.00000001" required>
+                </div>
+                <div class="form-group">
+                    <label for="buy-price">Precio (MXN):</label>
+                    <input type="number" id="buy-price" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="buy-portfolio">Portfolio:</label>
+                    <select id="buy-portfolio" required>
+                        <option value="">Seleccionar...</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeBuyModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Comprar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sell Modal -->
+    <div id="sell-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-minus"></i> Vender Criptomoneda</h3>
+                <span class="close" onclick="closeSellModal()">&times;</span>
+            </div>
+            <form id="sell-form">
+                <div class="form-group">
+                    <label for="sell-symbol">Criptomoneda:</label>
+                    <select id="sell-symbol" required>
+                        <option value="">Seleccionar...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sell-amount">Cantidad:</label>
+                    <input type="number" id="sell-amount" step="0.00000001" required>
+                </div>
+                <div class="form-group">
+                    <label for="sell-price">Precio (MXN):</label>
+                    <input type="number" id="sell-price" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="sell-portfolio">Portfolio:</label>
+                    <select id="sell-portfolio" required>
+                        <option value="">Seleccionar...</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeSellModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Vender</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div id="alert-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-bell"></i> Crear Alerta de Precio</h3>
+                <span class="close" onclick="closeAlertModal()">&times;</span>
+            </div>
+            <form id="alert-form">
+                <div class="form-group">
+                    <label for="alert-symbol">Criptomoneda:</label>
+                    <select id="alert-symbol" required>
+                        <option value="">Seleccionar...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="alert-type">Tipo de Alerta:</label>
+                    <select id="alert-type" required>
+                        <option value="above">Precio por encima de</option>
+                        <option value="below">Precio por debajo de</option>
+                        <option value="percent_change">Cambio porcentual</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="alert-value">Valor:</label>
+                    <input type="number" id="alert-value" step="0.01" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeAlertModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Crear Alerta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/websocket.js"></script>
+<script src="/static/js/dashboard.js"></script>
+{% endblock %}

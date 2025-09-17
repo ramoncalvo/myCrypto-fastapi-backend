@@ -131,14 +131,27 @@ async def login(
         return TokenResponseSchema.from_dto(token_response)
         
     except ValueError as e:
+        # Handle account locked or validation errors
+        if "locked" in str(e).lower():
+            raise HTTPException(
+                status_code=status.HTTP_423_LOCKED,
+                detail=str(e)
+            )
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e)
         )
+    except HTTPException:
+        # Re-raise HTTP exceptions (like 401 Unauthorized)
+        raise
     except Exception as e:
+        # Log unexpected errors but don't expose internal details
+        print(f"Unexpected login error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Authentication failed"
+            detail="Internal server error occurred during authentication"
         )
 
 
