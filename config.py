@@ -6,11 +6,16 @@ class Settings(BaseSettings):
     environment: str = os.getenv("ENVIRONMENT", "development")
     
     # Database Configuration
-    database_type: str = "mongodb"
+    database_type: str = os.getenv("DATABASE_TYPE", "mongodb")  # mongodb or firebase
     database_name: str = "mycrypto"
     
     # MongoDB Configuration
     mongodb_url: str = "mongodb://localhost:27017"
+    
+    # Firebase Configuration
+    firebase_project_id: str = os.getenv("FIREBASE_PROJECT_ID", "")
+    firebase_credentials_path: str = os.getenv("FIREBASE_CREDENTIALS_PATH", "")
+    firebase_credentials_json: str = os.getenv("FIREBASE_CREDENTIALS_JSON", "")
     
     # API Configuration
     api_host: str = "0.0.0.0"
