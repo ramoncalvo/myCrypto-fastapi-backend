@@ -1,0 +1,22 @@
+{
+  "name": "mycrypto-frontend",
+  "version": "1.0.0",
+  "description": "MyCrypto Frontend Build System",
+  "scripts": {
+    "build": "npm run build:js && npm run build:css",
+    "build:js": "terser static/js/api.js static/js/auth.js static/js/dashboard.js static/js/websocket.js --compress --mangle --source-map --output static/dist/app.min.js",
+    "build:css": "csso static/css/auth.css static/css/dashboard.css --output static/dist/app.min.css",
+    "watch": "npm run watch:js & npm run watch:css",
+    "watch:js": "chokidar 'static/js/*.js' -c 'npm run build:js'",
+    "watch:css": "chokidar 'static/css/*.css' -c 'npm run build:css'",
+    "clean": "rm -rf static/dist/*"
+  },
+  "devDependencies": {
+    "terser": "^5.24.0",
+    "csso-cli": "^4.0.2",
+    "chokidar-cli": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

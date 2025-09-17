@@ -1,16 +1,23 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from contextlib import asynccontextmanager
+from pathlib import Path
 
+from config import settings
 from database import db_factory
+from infrastructure.dependency_injection.container import DIContainer
+
+# Import routers
+from presentation.api.auth_routes import router as auth_router
 from presentation.api.user_routes import router as user_router
 from presentation.api.crypto_asset_routes import router as crypto_asset_router
 from presentation.api.portfolio_routes import router as portfolio_router
-from presentation.api.auth_routes import router as auth_router
-from presentation.api.transaction_routes import router as transaction_router
 from presentation.api.portfolio_aggregate_routes import router as portfolio_aggregate_router
+from presentation.api.transaction_routes import router as transaction_router
 from presentation.api.bitso_routes import router as bitso_router
+# from presentation.api.websocket_routes import router as websocket_router
 from presentation.api.ui_routes import router as ui_router
 
 
@@ -39,8 +46,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Mount static files - serve minified assets in production
+if settings.use_minified_assets and Path("static/dist").exists():
+    app.mount("/static", StaticFiles(directory="static/dist"), name="static")
+    print("🚀 Serving minified assets from static/dist/")
+else:
+    app.mount("/static", StaticFiles(directory="static"), name="static")
+    if settings.environment == "production":
+        print("⚠️  Warning: Production mode but minified assets not found. Run 'python build.py' first.")
 
 # Include routers
 app.include_router(ui_router)  # UI routes first (for root path)
@@ -51,6 +64,7 @@ app.include_router(portfolio_router)
 app.include_router(transaction_router)
 app.include_router(portfolio_aggregate_router)
 app.include_router(bitso_router)
+# app.include_router(websocket_router)  # WebSocket routes commented out for now
 
 
 @app.get("/api")

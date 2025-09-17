@@ -1,6 +1,10 @@
+import os
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
+    # Environment Configuration
+    environment: str = os.getenv("ENVIRONMENT", "development")
+    
     # Database Configuration
     database_type: str = "mongodb"
     database_name: str = "mycrypto"
@@ -18,7 +22,19 @@ class Settings(BaseSettings):
     jwt_access_token_expire_minutes: int = 30
     jwt_refresh_token_expire_days: int = 7
     
+    # Frontend Configuration
+    use_minified_assets: bool = False
+    
+    def __post_init__(self):
+        """Post initialization configuration"""
+        # Use minified assets in production
+        if self.environment == "production":
+            self.use_minified_assets = True
+    
     class Config:
         env_file = ".env"
 
 settings = Settings()
+# Apply post-init logic
+if settings.environment == "production":
+    settings.use_minified_assets = True

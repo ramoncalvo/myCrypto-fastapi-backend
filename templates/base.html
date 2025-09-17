@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}MyCrypto{% endblock %}</title>
     
-    <!-- Base CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- Page-specific CSS -->
-    {% block css %}{% endblock %}
+    <!-- Custom CSS -->
+    {% if use_minified_assets %}
+        <link rel="stylesheet" href="/static/app.min.css">
+    {% else %}
+        {% block css %}{% endblock %}
+    {% endif %}
     
     <!-- Additional head content -->
     {% block head %}{% endblock %}
@@ -21,10 +25,11 @@
     <!-- Notification Container -->
     <div id="notifications" class="notifications-container"></div>
 
-    <!-- Base JavaScript -->
-    <script src="/static/js/api.js"></script>
-    
-    <!-- Page-specific JavaScript -->
-    {% block js %}{% endblock %}
+    <!-- Custom JavaScript -->
+    {% if use_minified_assets %}
+        <script src="/static/app.min.js"></script>
+    {% else %}
+        {% block js %}{% endblock %}
+    {% endif %}
 </body>
 </html>
